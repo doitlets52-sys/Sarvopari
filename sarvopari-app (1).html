@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SarvoPari - Your Wellness Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 50%, #4ecdc4 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: splashFade 4s forwards;
+        }
+
+        .ashoka-chakra {
+            width: 120px;
+            height: 120px;
+            border: 4px solid #000080;
+            border-radius: 50%;
+            position: relative;
+            animation: spin 2s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        .ashoka-chakra::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #000080;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .chakra-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50px;
+            background: #000080;
+            transform-origin: 0 0;
+        }
+
+        .splash-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: textGlow 2s ease-in-out infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        .made-by {
+            font-size: 1.2rem;
+            color: white;
+            opacity: 0.9;
+            animation: fadeInUp 3s ease-out;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+            to { text-shadow: 2px 2px 20px rgba(255,255,255,0.8); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 0.9; transform: translateY(0); }
+        }
+
+        @keyframes splashFade {
+            0% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+
+        /* Main App Container */
+        .app-container {
+            opacity: 0;
+            animation: appFadeIn 1s 4s forwards;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @keyframes appFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .app-title {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .app-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #feca57, #ff9ff3);
+            transform: scale(1.05);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: sectionSlideIn 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes sectionSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* Mood Tracking */
+        .mood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mood-btn {
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 3rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .mood-btn.happy { background: linear-gradient(135deg, #feca57, #ff9ff3); }
+        .mood-btn.sad { background: linear-gradient(135deg, #54a0ff, #2e86de); }
+        .mood-btn.neutral { background: linear-gradient(135deg, #c7ecee, #dde7f0); }
+        .mood-btn.angry { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
+        .mood-btn.excited { background: linear-gradient(135deg, #ff9f43, #feca57); }
+
+        /* Habit Tracker */
+        .habit-container {
+            margin-bottom: 20px;
+        }
+
+        .add-habit-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .habit-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .habit-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .habit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .habit-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .habit-streak {
+            padding: 5px 12px;
+            background: linear-gradient(45deg, #feca57, #ff9ff3);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .habit-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .habit-toggle {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .habit-toggle.completed {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .habit-toggle.not-completed {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            text-align: center;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .answer-options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .answer-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .answer-btn.selected {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border-color: #4ecdc4;
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        /* Fitness Tracking */
+        .fitness-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .fitness-input {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .fitness-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Tic Tac Toe Game */
+        .game-container {
+            text-align: center;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            max-width: 300px;
+            margin: 0 auto 20px;
+            background: #333;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: white;
+            border: none;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .cell:hover {
+            background: #e9ecef;
+            transform: scale(0.95);
+        }
+
+        .cell.x {
+            color: #e74c3c;
+        }
+
+        .cell.o {
+            color: #3498db;
+        }
+
+        .game-info {
+            margin-bottom: 20px;
+        }
+
+        .difficulty-selector {
+            margin: 20px 0;
+        }
+
+        .difficulty-btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: 2px solid #4ecdc4;
+            background: white;
+            color: #4ecdc4;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.active {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        /* Profile Section */
+        .profile-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        /* AI Avatar */
+        .ai-avatar-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .ai-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        .ai-avatar.happy {
+            background: linear-gradient(135deg, #feca57, #ff9ff3);
+        }
+
+        .ai-avatar.sad {
+            background: linear-gradient(135deg, #54a0ff, #2e86de);
+        }
+
+        .ai-avatar.neutral {
+            background: linear-gradient(135deg, #c7ecee, #dde7f0);
+        }
+
+        .ai-avatar.angry {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .ai-message {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4ecdc4;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .avatar-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: #333;
+        }
+
+        /* Timeline */
+        .timeline {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            animation: timelineSlide 0.5s ease-out;
+        }
+
+        @keyframes timelineSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timeline-mood {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 200px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .mood-selector {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .fitness-form {
+                grid-template-columns: 1fr;
+            }
+
+            .fitness-stats {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        /* Donation Section */
+        .donation-container {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .donation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .donate-btn {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .donate-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        /* Feedback */
+        .feedback-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #feca57;
+        }
+
+        /* Hide sections initially */
+        .content-section:not(.active) {
+            display: none;
+        }
+
+        /* Premium Badge */
+        .premium-badge {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen">
+        <div class="ashoka-chakra">
+            <!-- Create 24 spokes for Ashoka Chakra -->
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(0deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(15deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(30deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(45deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(60deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(75deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(90deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(105deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(120deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(135deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(150deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(165deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(180deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(195deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(210deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(225deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(240deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(255deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(270deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(285deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(300deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(315deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(330deg);"></div>
+            <div class="chakra-spoke" style="transform: translate(-50%, -50%) rotate(345deg);"></div>
+        </div>
+        <div class="splash-text">SarvoPari</div>
+        <div class="made-by">Made by Nitish Chandra</div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="app-title">SarvoPari</h1>
+            <p class="app-subtitle">Your Complete Wellness & Productivity Companion</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showSection('home')">🏠 Home</button>
+            <button class="nav-btn" onclick="showSection('mood')">😊 Mood</button>
+            <button class="nav-btn" onclick="showSection('habits')">✅ Habits</button>
+            <button class="nav-btn" onclick="showSection('quiz')">🧠 Quiz</button>
+            <button class="nav-btn" onclick="showSection('fitness')">💪 Fitness</button>
+            <button class="nav-btn" onclick="showSection('game')">🎮 Game</button>
+            <button class="nav-btn" onclick="showSection('profile')">👤 Profile</button>
+            <button class="nav-btn" onclick="showSection('support')">💝 Support</button>
+        </div>
+
+        <!-- Home Section -->
+        <div id="home" class="content-section active">
+            <h2 class="section-title">Welcome to SarvoPari</h2>
+            <div class="ai-avatar-container">
+                <div class="ai-avatar happy" id="homeAvatar">😊</div>
+                <div class="ai-message" id="homeMessage">
+                    Welcome back! I'm here to guide you on your wellness journey. Let's make today amazing together!
+                </div>
+                <div class="avatar-selector">
+                    <div class="avatar-option happy" style="background: linear-gradient(135deg, #feca57, #ff9ff3);" onclick="changeAvatar('happy', '😊', 'Great to see you in high spirits! Keep that positive energy flowing!')">😊</div>
+                    <div class="avatar-option sad" style="background: linear-gradient(135deg, #54a0ff, #2e86de);" onclick="changeAvatar('sad', '😢', 'I understand you might be feeling down. Remember, it\'s okay to have tough days. I\'m here to support you.')">😢</div>
+                    <div class="avatar-option neutral" style="background: linear-gradient(135deg, #c7ecee, #dde7f0);" onclick="changeAvatar('neutral', '😐', 'Feeling balanced today? That\'s perfectly fine. Let\'s work together to make progress.')">😐</div>
+                    <div class="avatar-option angry" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);" onclick="changeAvatar('angry', '😠', 'I sense some frustration. Let\'s channel that energy into something positive and productive.')">😠</div>
+                </div>
+            </div>
+            <div class="donation-container">
+                <h3>Love SarvoPari? Support Our Mission!</h3>
+                <p>Your support helps us continue developing amazing features for your wellness journey.</p>
+                <div class="donation-buttons">
+                    <a href="#" class="donate-btn" onclick="alert('PayPal integration would go here in production')">💳 PayPal</a>
+                    <a href="#" class="donate-btn" onclick="alert('UPI integration would go here in production')">📱 UPI Pay</a>
+                    <button class="donate-btn" onclick="unlockPremium()">⭐ Go Premium</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mood Tracking Section -->
+        <div id="mood" class="content-section">
+            <h2 class="section-title">How are you feeling today?</h2>
+            <div class="mood-selector">
+                <button class="mood-btn happy" onclick="selectMood('happy', '😊')">😊</button>
+                <button class="mood-btn sad" onclick="selectMood('sad', '😢')">😢</button>
+                <button class="mood-btn neutral" onclick="selectMood('neutral', '😐')">😐</button>
+                <button class="mood-btn angry" onclick="selectMood('angry', '😠')">😠</button>
+                <button class="mood-btn excited" onclick="selectMood('excited', '🤩')">🤩</button>
+            </div>
+            <div id="moodTimeline">
+                <h3>Your Mood Timeline</h3>
+                <div class="timeline" id="moodHistory"></div>
+            </div>
+        </div>
+
+        <!-- Habits Section -->
+        <div id="habits" class="content-section">
+            <h2 class="section-title">Daily Habits Tracker</h2>
+            <div class="habit-container">
+                <div class="add-habit-form" id="habitForm" style="display: none;">
+                    <h3>Add New Habit</h3>
+                    <div class="form-group">
+                        <label for="habitName">Habit Name:</label>
+                        <input type="text" id="habitName" placeholder="e.g., Exercise, Read, Meditate">
+                    </div>
+                    <div class="form-group">
+                        <label for="habitDescription">Description:</label>
+                        <textarea id="habitDescription" rows="3" placeholder="Describe your habit and goals..."></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="addHabit()">Add Habit</button>
+                    <button class="btn-secondary" onclick="cancelHabitForm()">Cancel</button>
+                </div>
+                <button class="btn-primary" id="showHabitFormBtn" onclick="showHabitForm()">+ Add New Habit</button>
+                <div id="habitsList"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz" class="content-section">
+            <h2 class="section-title">Daily Knowledge Quiz</h2>
+            <div class="quiz-container">
+                <div class="question-card" id="quizCard">
+                    <div class="question-text" id="questionText">Loading question...</div>
+                    <div class="answer-options" id="answerOptions"></div>
+                    <button class="btn-primary" id="submitAnswer" onclick="submitAnswer()" style="display: none;">Submit Answer</button>
+                    <button class="btn-primary" id="nextQuestion" onclick="nextQuestion()" style="display: none;">Next Question</button>
+                </div>
+                <div class="quiz-stats">
+                    <h3>Your Quiz Stats</h3>
+                    <div class="fitness-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalQuizzes">0</div>
+                            <div class="stat-label">Total Quizzes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="correctAnswers">0</div>
+                            <div class="stat-label">Correct Answers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="accuracy">0%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fitness Section -->
+        <div id="fitness" class="content-section">
+            <h2 class="section-title">Fitness Tracker</h2>
+            <div class="fitness-form">
+                <div class="fitness-input">
+                    <label for="stepsInput">Steps Taken:</label>
+                    <input type="number" id="stepsInput" placeholder="Enter steps" min="0">
+                    <button class="btn-primary" onclick="updateFitness('steps')">Update</button>
+                </div>
+                <div class="fitness-input">
+                    <label for="caloriesInput">Calories Burned:</label>
+                    <input type="number" id="caloriesInput" placeholder="Enter calories" min="0">
+                    <button class="btn-primary" onclick="updateFitness('calories')">Update</button>
+                </div>
+                <div class="fitness-input">
+                    <label for="workoutInput">Workout Minutes:</label>
+                    <input type="number" id="workoutInput" placeholder="Enter minutes" min="0">
+                    <button class="btn-primary" onclick="updateFitness('workout')">Update</button>
+                </div>
+            </div>
+            <div class="fitness-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="todaySteps">0</div>
+                    <div class="stat-label">Steps Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todayCalories">0</div>
+                    <div class="stat-label">Calories Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todayWorkout">0</div>
+                    <div class="stat-label">Minutes Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="weeklyGoal">70%</div>
+                    <div class="stat-label">Weekly Goal</div>
+                </div>
+            </div>
+            <div class="ai-avatar-container">
+                <div class="ai-avatar happy">💪</div>
+                <div class="ai-message">
+                    Keep up the great work! Every step counts towards your fitness goals. Remember, consistency is key!
+                </div>
+            </div>
+        </div>
+
+        <!-- Tic Tac Toe Game -->
+        <div id="game" class="content-section">
+            <h2 class="section-title">Mind Exercise: Tic Tac Toe</h2>
+            <div class="game-container">
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')">Easy</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')">Medium</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')">Hard</button>
+                </div>
+                <div class="game-info">
+                    <h3 id="gameStatus">Your turn! (X)</h3>
+                    <p>Difficulty: <span id="currentDifficulty">Easy</span></p>
+                </div>
+                <div class="game-board" id="gameBoard"></div>
+                <button class="btn-primary" onclick="resetGame()">New Game</button>
+                <div class="fitness-stats" style="margin-top: 20px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="wins">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="losses">0</div>
+                        <div class="stat-label">Losses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="draws">0</div>
+                        <div class="stat-label">Draws</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile" class="content-section">
+            <h2 class="section-title">Your Profile</h2>
+            <div class="profile-container">
+                <div class="profile-avatar" id="profileAvatar">👤</div>
+                <div class="form-group">
+                    <label for="userName">Name:</label>
+                    <input type="text" id="userName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="userAge">Age:</label>
+                    <input type="number" id="userAge" placeholder="Enter your age" min="1" max="120">
+                </div>
+                <div class="form-group">
+                    <label for="userGoal">Primary Goal:</label>
+                    <select id="userGoal">
+                        <option value="">Select your goal</option>
+                        <option value="fitness">Improve Fitness</option>
+                        <option value="mental">Mental Wellness</option>
+                        <option value="productivity">Boost Productivity</option>
+                        <option value="habits">Build Better Habits</option>
+                        <option value="learning">Continuous Learning</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+                <div class="premium-features" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <h3>Premium Features <span class="premium-badge">PREMIUM</span></h3>
+                    <ul style="text-align: left; margin: 15px 0;">
+                        <li>Advanced AI avatars with personalized advice</li>
+                        <li>Detailed analytics and progress reports</li>
+                        <li>Unlimited habit tracking</li>
+                        <li>Custom quiz categories</li>
+                        <li>Export your data</li>
+                        <li>Priority customer support</li>
+                    </ul>
+                    <button class="btn-primary" onclick="unlockPremium()">Unlock Premium</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Section -->
+        <div id="support" class="content-section">
+            <h2 class="section-title">Support & Feedback</h2>
+            <div class="feedback-form">
+                <h3>Rate Your Experience</h3>
+                <div class="rating-stars" id="ratingStars">
+                    <span class="star" onclick="setRating(1)">⭐</span>
+                    <span class="star" onclick="setRating(2)">⭐</span>
+                    <span class="star" onclick="setRating(3)">⭐</span>
+                    <span class="star" onclick="setRating(4)">⭐</span>
+                    <span class="star" onclick="setRating(5)">⭐</span>
+                </div>
+                <div class="form-group">
+                    <label for="feedback">Your Feedback:</label>
+                    <textarea id="feedback" rows="5" placeholder="Tell us about your experience with SarvoPari..."></textarea>
+                </div>
+                <button class="btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+                
+                <div style="margin-top: 40px;">
+                    <h3>Contact Support</h3>
+                    <p>Having issues? We're here to help!</p>
+                    <button class="btn-primary" onclick="alert('Email: support@sarvopari.com')">📧 Email Support</button>
+                    <button class="btn-secondary" onclick="alert('FAQ section would be available in full version')">❓ View FAQ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentSection = 'home';
+        let userData = JSON.parse(localStorage.getItem('sarvoparisUserData')) || {
+            profile: { name: '', age: '', goal: '' },
+            moods: [],
+            habits: [],
+            quizStats: { total: 0, correct: 0 },
+            fitness: { steps: 0, calories: 0, workout: 0 },
+            gameStats: { wins: 0, losses: 0, draws: 0 },
+            isPremium: false
+        };
+
+        let currentQuiz = {
+            questions: [
+                {
+                    question: "What is the capital of India?",
+                    options: ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
+                    correct: 1
+                },
+                {
+                    question: "Which vitamin is produced when skin is exposed to sunlight?",
+                    options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+                    correct: 3
+                },
+                {
+                    question: "What is the largest planet in our solar system?",
+                    options: ["Earth", "Jupiter", "Saturn", "Mars"],
+                    correct: 1
+                },
+                {
+                    question: "Which organ in the human body produces insulin?",
+                    options: ["Liver", "Kidney", "Pancreas", "Heart"],
+                    correct: 2
+                },
+                {
+                    question: "What is the chemical symbol for gold?",
+                    options: ["Go", "Gd", "Au", "Ag"],
+                    correct: 2
+                }
+            ],
+            currentIndex: 0,
+            selectedAnswer: null
+        };
+
+        // Tic Tac Toe Game Variables
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameActive = true;
+        let difficulty = 'easy';
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            initializeGame();
+            loadQuiz();
+            updateFitnessDisplay();
+            updateMoodTimeline();
+            updateHabitsDisplay();
+            updateQuizStats();
+            
+            // Auto-save data every 30 seconds
+            setInterval(saveUserData, 30000);
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+            currentSection = sectionName;
+        }
+
+        // AI Avatar Functions
+        function changeAvatar(mood, emoji, message) {
+            const avatar = document.getElementById('homeAvatar');
+            const messageEl = document.getElementById('homeMessage');
+            
+            avatar.className = `ai-avatar ${mood}`;
+            avatar.textContent = emoji;
+            messageEl.textContent = message;
+        }
+
+        // Mood Tracking
+        function selectMood(mood, emoji) {
+            const today = new Date().toDateString();
+            
+            // Remove existing mood for today if any
+            userData.moods = userData.moods.filter(m => m.date !== today);
+            
+            // Add new mood
+            userData.moods.push({
+                mood: mood,
+                emoji: emoji,
+                date: today,
+                timestamp: new Date().getTime()
+            });
+            
+            // Keep only last 30 days
+            if (userData.moods.length > 30) {
+                userData.moods = userData.moods.slice(-30);
+            }
+            
+            updateMoodTimeline();
+            saveUserData();
+            
+            // Show feedback
+            alert(`Mood "${mood}" recorded for today! ${emoji}`);
+        }
+
+        function updateMoodTimeline() {
+            const timeline = document.getElementById('moodHistory');
+            timeline.innerHTML = '';
+            
+            const sortedMoods = [...userData.moods].sort((a, b) => b.timestamp - a.timestamp);
+            
+            sortedMoods.forEach(mood => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-mood">${mood.emoji}</div>
+                    <div>
+                        <strong>${mood.mood}</strong>
+                        <div class="timeline-date">${mood.date}</div>
+                    </div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        // Habits Tracking
+        function showHabitForm() {
+            document.getElementById('habitForm').style.display = 'block';
+            document.getElementById('showHabitFormBtn').style.display = 'none';
+        }
+
+        function cancelHabitForm() {
+            document.getElementById('habitForm').style.display = 'none';
+            document.getElementById('showHabitFormBtn').style.display = 'block';
+            document.getElementById('habitName').value = '';
+            document.getElementById('habitDescription').value = '';
+        }
+
+        function addHabit() {
+            const name = document.getElementById('habitName').value.trim();
+            const description = document.getElementById('habitDescription').value.trim();
+            
+            if (!name) {
+                alert('Please enter a habit name!');
+                return;
+            }
+            
+            const habit = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                streak: 0,
+                completedToday: false,
+                history: []
+            };
+            
+            userData.habits.push(habit);
+            updateHabitsDisplay();
+            cancelHabitForm();
+            saveUserData();
+        }
+
+        function updateHabitsDisplay() {
+            const habitsList = document.getElementById('habitsList');
+            habitsList.innerHTML = '';
+            
+            userData.habits.forEach(habit => {
+                const habitItem = document.createElement('div');
+                habitItem.className = 'habit-item';
+                habitItem.innerHTML = `
+                    <div class="habit-header">
+                        <div class="habit-name">${habit.name}</div>
+                        <div class="habit-streak">${habit.streak} day streak</div>
+                    </div>
+                    <div class="habit-description">${habit.description}</div>
+                    <button class="habit-toggle ${habit.completedToday ? 'completed' : 'not-completed'}" 
+                            onclick="toggleHabit(${habit.id})">
+                        ${habit.completedToday ? '✅ Completed Today' : '⭕ Mark as Done'}
+                    </button>
+                `;
+                habitsList.appendChild(habitItem);
+            });
+        }
+
+        function toggleHabit(habitId) {
+            const habit = userData.habits.find(h => h.id === habitId);
+            if (!habit) return;
+            
+            const today = new Date().toDateString();
+            
+            if (!habit.completedToday) {
+                habit.completedToday = true;
+                habit.streak++;
+                habit.history.push(today);
+                
+                // Show celebration animation
+                alert(`Great job! You've completed "${habit.name}" today! 🎉\nCurrent streak: ${habit.streak} days`);
+            } else {
+                habit.completedToday = false;
+                habit.streak = Math.max(0, habit.streak - 1);
+                habit.history = habit.history.filter(date => date !== today);
+            }
+            
+            updateHabitsDisplay();
+            saveUserData();
+        }
+
+        // Quiz Functions
+        function loadQuiz() {
+            if (!currentQuiz || !currentQuiz.questions || currentQuiz.questions.length === 0) {
+                console.error('Quiz questions not available');
+                return;
+            }
+            
+            const question = currentQuiz.questions[currentQuiz.currentIndex];
+            const questionTextEl = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('answerOptions');
+            const submitBtn = document.getElementById('submitAnswer');
+            const nextBtn = document.getElementById('nextQuestion');
+            
+            if (!questionTextEl || !optionsContainer || !submitBtn || !nextBtn) {
+                console.error('Quiz elements not found in DOM');
+                return;
+            }
+            
+            questionTextEl.textContent = question.question;
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+            
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            currentQuiz.selectedAnswer = null;
+        }
+
+        function selectAnswer(index) {
+            const buttons = document.querySelectorAll('#answerOptions .answer-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('selected');
+                btn.disabled = false;
+            });
+            
+            buttons[index].classList.add('selected');
+            currentQuiz.selectedAnswer = index;
+            
+            const submitBtn = document.getElementById('submitAnswer');
+            if (submitBtn) {
+                submitBtn.style.display = 'inline-block';
+            }
+        }
+
+        function submitAnswer() {
+            if (currentQuiz.selectedAnswer === null) {
+                alert('Please select an answer first!');
+                return;
+            }
+            
+            const question = currentQuiz.questions[currentQuiz.currentIndex];
+            const buttons = document.querySelectorAll('#answerOptions .answer-btn');
+            const submitBtn = document.getElementById('submitAnswer');
+            const nextBtn = document.getElementById('nextQuestion');
+            
+            // Disable all buttons to prevent multiple clicks
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.onclick = null;
+            });
+            
+            userData.quizStats.total++;
+            
+            // Show correct/incorrect styling
+            if (currentQuiz.selectedAnswer === question.correct) {
+                buttons[currentQuiz.selectedAnswer].classList.add('correct');
+                userData.quizStats.correct++;
+                
+                // Show motivational message
+                const messages = [
+                    'Correct! Well done! 🎉',
+                    'Excellent! You got it right! ⭐',
+                    'Perfect! Keep up the great work! 🌟',
+                    'Outstanding! Your knowledge is impressive! 🏆',
+                    'Brilliant! You\'re on fire! 🔥'
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                setTimeout(() => alert(randomMessage), 200);
+            } else {
+                buttons[currentQuiz.selectedAnswer].classList.add('incorrect');
+                buttons[question.correct].classList.add('correct');
+                setTimeout(() => alert(`Not quite right. The correct answer was: "${question.options[question.correct]}".\nKeep learning! 💪`), 200);
+            }
+            
+            // Hide submit button and show next button
+            if (submitBtn) submitBtn.style.display = 'none';
+            if (nextBtn) nextBtn.style.display = 'inline-block';
+            
+            updateQuizStats();
+            saveUserData();
+        }
+
+        function nextQuestion() {
+            // Reset quiz state
+            currentQuiz.selectedAnswer = null;
+            
+            // Move to next question (cycle through questions)
+            currentQuiz.currentIndex = (currentQuiz.currentIndex + 1) % currentQuiz.questions.length;
+            
+            // Load the next question
+            loadQuiz();
+            
+            // Show completion message every 5 questions
+            if ((userData.quizStats.total) % 5 === 0 && userData.quizStats.total > 0) {
+                setTimeout(() => {
+                    const accuracy = Math.round((userData.quizStats.correct / userData.quizStats.total) * 100);
+                    alert(`🎯 Quiz Milestone!\n\nYou've completed ${userData.quizStats.total} questions!\nCurrent accuracy: ${accuracy}%\n\nKeep up the excellent work!`);
+                }, 500);
+            }
+        }
+
+        function updateQuizStats() {
+            const totalEl = document.getElementById('totalQuizzes');
+            const correctEl = document.getElementById('correctAnswers');
+            const accuracyEl = document.getElementById('accuracy');
+            
+            if (totalEl) totalEl.textContent = userData.quizStats.total || 0;
+            if (correctEl) correctEl.textContent = userData.quizStats.correct || 0;
+            
+            if (accuracyEl) {
+                const accuracy = userData.quizStats.total > 0 
+                    ? Math.round((userData.quizStats.correct / userData.quizStats.total) * 100)
+                    : 0;
+                accuracyEl.textContent = accuracy + '%';
+            }
+        }
+
+        function resetQuiz() {
+            currentQuiz.currentIndex = 0;
+            currentQuiz.selectedAnswer = null;
+            loadQuiz();
+        }
+
+        // Fitness Tracking
+        function updateFitness(type) {
+            const inputId = type + 'Input';
+            const value = parseInt(document.getElementById(inputId).value) || 0;
+            
+            if (value <= 0) {
+                alert('Please enter a valid number!');
+                return;
+            }
+            
+            userData.fitness[type] = (userData.fitness[type] || 0) + value;
+            document.getElementById(inputId).value = '';
+            
+            updateFitnessDisplay();
+            saveUserData();
+            
+            // Show motivational message
+            const messages = {
+                steps: `Great! You've added ${value} steps to your daily count!`,
+                calories: `Awesome! ${value} calories burned - keep up the good work!`,
+                workout: `Excellent! ${value} minutes of workout completed!`
+            };
+            
+            alert(messages[type]);
+        }
+
+        function updateFitnessDisplay() {
+            document.getElementById('todaySteps').textContent = userData.fitness.steps || 0;
+            document.getElementById('todayCalories').textContent = userData.fitness.calories || 0;
+            document.getElementById('todayWorkout').textContent = userData.fitness.workout || 0;
+            
+            // Calculate weekly goal progress (example calculation)
+            const totalActivity = (userData.fitness.steps || 0) + (userData.fitness.calories || 0) + ((userData.fitness.workout || 0) * 10);
+            const goalProgress = Math.min(Math.round(totalActivity / 100), 100);
+            document.getElementById('weeklyGoal').textContent = goalProgress + '%';
+        }
+
+        // Tic Tac Toe Game
+        function initializeGame() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'cell';
+                cell.onclick = () => makeMove(i);
+                board.appendChild(cell);
+            }
+            
+            updateGameStats();
+        }
+
+        function makeMove(index) {
+            if (gameBoard[index] !== '' || !gameActive) return;
+            
+            gameBoard[index] = currentPlayer;
+            updateBoard();
+            
+            if (checkWinner()) {
+                document.getElementById('gameStatus').textContent = `${currentPlayer} wins! 🎉`;
+                gameActive = false;
+                
+                if (currentPlayer === 'X') {
+                    userData.gameStats.wins++;
+                } else {
+                    userData.gameStats.losses++;
+                }
+                updateGameStats();
+                saveUserData();
+                return;
+            }
+            
+            if (gameBoard.every(cell => cell !== '')) {
+                document.getElementById('gameStatus').textContent = "It's a draw! 🤝";
+                gameActive = false;
+                userData.gameStats.draws++;
+                updateGameStats();
+                saveUserData();
+                return;
+            }
+            
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('gameStatus').textContent = `${currentPlayer}'s turn`;
+            
+            if (currentPlayer === 'O') {
+                setTimeout(makeAIMove, 500);
+            }
+        }
+
+        function makeAIMove() {
+            if (!gameActive) return;
+            
+            let move;
+            
+            switch (difficulty) {
+                case 'easy':
+                    move = getRandomMove();
+                    break;
+                case 'medium':
+                    move = Math.random() > 0.5 ? getBestMove() : getRandomMove();
+                    break;
+                case 'hard':
+                    move = getBestMove();
+                    break;
+            }
+            
+            if (move !== -1) {
+                makeMove(move);
+            }
+        }
+
+        function getRandomMove() {
+            const emptyCells = gameBoard.map((cell, index) => cell === '' ? index : null).filter(val => val !== null);
+            return emptyCells.length > 0 ? emptyCells[Math.floor(Math.random() * emptyCells.length)] : -1;
+        }
+
+        function getBestMove() {
+            // Simple AI using minimax-like logic
+            // First, check if AI can win
+            for (let i = 0; i < 9; i++) {
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = 'O';
+                    if (checkWinner()) {
+                        gameBoard[i] = '';
+                        return i;
+                    }
+                    gameBoard[i] = '';
+                }
+            }
+            
+            // Second, check if player is about to win and block
+            for (let i = 0; i < 9; i++) {
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = 'X';
+                    if (checkWinner()) {
+                        gameBoard[i] = '';
+                        return i;
+                    }
+                    gameBoard[i] = '';
+                }
+            }
+            
+            // Otherwise, make a strategic move
+            const strategicMoves = [4, 0, 2, 6, 8, 1, 3, 5, 7]; // Center, corners, then edges
+            for (let move of strategicMoves) {
+                if (gameBoard[move] === '') {
+                    return move;
+                }
+            }
+            
+            return getRandomMove();
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+            
+            return winPatterns.some(pattern => {
+                const [a, b, c] = pattern;
+                return gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c];
+            });
+        }
+
+        function updateBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                cell.textContent = gameBoard[index];
+                cell.className = `cell ${gameBoard[index].toLowerCase()}`;
+            });
+        }
+
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            document.getElementById('gameStatus').textContent = "Your turn! (X)";
+            updateBoard();
+        }
+
+        function setDifficulty(level) {
+            difficulty = level;
+            document.getElementById('currentDifficulty').textContent = level.charAt(0).toUpperCase() + level.slice(1);
+            
+            const buttons = document.querySelectorAll('.difficulty-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            resetGame();
+        }
+
+        function updateGameStats() {
+            document.getElementById('wins').textContent = userData.gameStats.wins;
+            document.getElementById('losses').textContent = userData.gameStats.losses;
+            document.getElementById('draws').textContent = userData.gameStats.draws;
+        }
+
+        // Profile Functions
+        function saveProfile() {
+            const name = document.getElementById('userName').value.trim();
+            const age = parseInt(document.getElementById('userAge').value) || 0;
+            const goal = document.getElementById('userGoal').value;
+            
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+            
+            userData.profile = { name, age, goal };
+            
+            // Update profile avatar
+            document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+            
+            saveUserData();
+            alert('Profile saved successfully!');
+        }
+
+        // Support & Feedback
+        let userRating = 0;
+
+        function setRating(rating) {
+            userRating = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                star.classList.toggle('active', index < rating);
+            });
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('feedback').value.trim();
+            
+            if (userRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            if (!feedback) {
+                alert('Please enter your feedback!');
+                return;
+            }
+            
+            // In a real app, this would send data to a server
+            alert(`Thank you for your ${userRating}-star rating and feedback! We appreciate your input.`);
+            
+            // Reset form
+            userRating = 0;
+            document.getElementById('feedback').value = '';
+            document.querySelectorAll('.star').forEach(star => star.classList.remove('active'));
+        }
+
+        // Premium Features
+        function unlockPremium() {
+            if (confirm('Unlock Premium features for enhanced AI guidance, detailed analytics, and more?\n\nThis would redirect to payment in a real app.')) {
+                userData.isPremium = true;
+                saveUserData();
+                alert('Welcome to Premium! 🎉 All features are now unlocked!');
+                
+                // Add premium badge to profile
+                const premiumFeatures = document.querySelector('.premium-features h3');
+                if (!premiumFeatures.innerHTML.includes('UNLOCKED')) {
+                    premiumFeatures.innerHTML = 'Premium Features <span class="premium-badge" style="background: #2ecc71;">UNLOCKED</span>';
+                }
+            }
+        }
+
+        // Data Management
+        function saveUserData() {
+            try {
+                localStorage.setItem('sarvoparisUserData', JSON.stringify(userData));
+            } catch (error) {
+                console.warn('Could not save data to localStorage:', error);
+            }
+        }
+
+        function loadUserData() {
+            try {
+                const saved = localStorage.getItem('sarvoparisUserData');
+                if (saved) {
+                    const parsedData = JSON.parse(saved);
+                    userData = { ...userData, ...parsedData };
+                    
+                    // Load profile data
+                    if (userData.profile.name) {
+                        document.getElementById('userName').value = userData.profile.name;
+                        document.getElementById('profileAvatar').textContent = userData.profile.name.charAt(0).toUpperCase();
+                    }
+                    if (userData.profile.age) {
+                        document.getElementById('userAge').value = userData.profile.age;
+                    }
+                    if (userData.profile.goal) {
+                        document.getElementById('userGoal').value = userData.profile.goal;
+                    }
+                    
+                    // Reset daily habits if new day
+                    const today = new Date().toDateString();
+                    const lastVisit = localStorage.getItem('sarvoparisLastVisit');
+                    if (lastVisit !== today) {
+                        userData.habits.forEach(habit => {
+                            habit.completedToday = false;
+                        });
+                        // Reset daily fitness (optional - you might want to keep cumulative)
+                        // userData.fitness = { steps: 0, calories: 0, workout: 0 };
+                        localStorage.setItem('sarvoparisLastVisit', today);
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not load data from localStorage:', error);
+            }
+        }
+
+        // Motivational messages and gamification
+        function showMotivationalMessage() {
+            const messages = [
+                "You're doing great! Keep up the excellent work! 🌟",
+                "Every small step counts towards your bigger goals! 💪",
+                "Consistency is the key to success! You've got this! 🔥",
+                "Your future self will thank you for the effort you put in today! ✨",
+                "Progress, not perfection, is what matters! Keep going! 🚀"
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            // Create a temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #4ecdc4, #44a08d);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+                animation: slideIn 0.5s ease-out;
+            `;
+            notification.textContent = randomMessage;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-in forwards';
+                setTimeout(() => document.body.removeChild(notification), 500);
+            }, 4000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Show motivational message randomly
+        setInterval(() => {
+            if (Math.random() < 0.1) { // 10% chance every interval
+                showMotivationalMessage();
+            }
+        }, 30000); // Check every 30 seconds
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey) {
+                switch(e.key) {
+                    case '1': showSection('home'); break;
+                    case '2': showSection('mood'); break;
+                    case '3': showSection('habits'); break;
+                    case '4': showSection('quiz'); break;
+                    case '5': showSection('fitness'); break;
+                    case '6': showSection('game'); break;
+                    case '7': showSection('profile'); break;
+                    case '8': showSection('support'); break;
+                }
+            }
+        });
+
+        // Add some interactive Easter eggs
+        let clickCount = 0;
+        document.querySelector('.app-title').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 5) {
+                this.style.animation = 'bounce 0.5s ease-in-out';
+                alert('🎉 You found an Easter egg! Keep exploring SarvoPari!');
+                clickCount = 0;
+                setTimeout(() => this.style.animation = '', 500);
+            }
+        });
+
+        // Add bounce animation
+        const bounceStyle = document.createElement('style');
+        bounceStyle.textContent = `
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-30px); }
+                60% { transform: translateY(-15px); }
+            }
+        `;
+        document.head.appendChild(bounceStyle);
+
+        // Welcome back detection
+        window.addEventListener('focus', function() {
+            const lastFocus = localStorage.getItem('sarvoparisLastFocus');
+            const now = Date.now();
+            const fiveMinutes = 5 * 60 * 1000;
+            
+            if (lastFocus && (now - parseInt(lastFocus)) > fiveMinutes) {
+                setTimeout(() => {
+                    if (currentSection === 'home') {
+                        changeAvatar('happy', '😊', 'Welcome back! Ready to continue your wellness journey?');
+                    }
+                }, 1000);
+            }
+            
+            localStorage.setItem('sarvoparisLastFocus', now.toString());
+        });
+
+        // Achievement system
+        function checkAchievements() {
+            const achievements = [];
+            
+            // Habit streak achievements
+            const maxStreak = Math.max(...userData.habits.map(h => h.streak), 0);
+            if (maxStreak >= 7) achievements.push('Week Warrior - 7 day streak! 🔥');
+            if (maxStreak >= 30) achievements.push('Month Master - 30 day streak! 🏆');
+            
+            // Quiz achievements
+            if (userData.quizStats.total >= 10) achievements.push('Quiz Enthusiast - 10 quizzes completed! 🧠');
+            if (userData.quizStats.correct >= 50) achievements.push('Knowledge Seeker - 50 correct answers! 📚');
+            
+            // Fitness achievements
+            if (userData.fitness.steps >= 10000) achievements.push('Step Counter - 10,000 steps! 👟');
+            if (userData.fitness.workout >= 60) achievements.push('Fitness Fanatic - 60 minutes workout! 💪');
+            
+            // Game achievements
+            if (userData.gameStats.wins >= 5) achievements.push('Strategic Thinker - 5 game wins! 🎮');
+            
+            return achievements;
+        }
+
+        // Show achievements occasionally
+        function showRandomAchievement() {
+            const achievements = checkAchievements();
+            if (achievements.length > 0 && Math.random() < 0.3) {
+                const randomAchievement = achievements[Math.floor(Math.random() * achievements.length)];
+                
+                const badge = document.createElement('div');
+                badge.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(45deg, #ffd700, #ff8c00);
+                    color: white;
+                    padding: 20px 30px;
+                    border-radius: 15px;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                    z-index: 2000;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    animation: achievementPop 0.6s ease-out;
+                `;
+                badge.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🏆</div>
+                    <div>Achievement Unlocked!</div>
+                    <div style="font-size: 1rem; margin-top: 10px;">${randomAchievement}</div>
+                `;
+                
+                document.body.appendChild(badge);
+                
+                setTimeout(() => {
+                    badge.style.animation = 'achievementFade 0.5s ease-in forwards';
+                    setTimeout(() => document.body.removeChild(badge), 500);
+                }, 3000);
+            }
+        }
+
+        // Add achievement animations
+        const achievementStyle = document.createElement('style');
+        achievementStyle.textContent = `
+            @keyframes achievementPop {
+                0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+                50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+                100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            }
+            @keyframes achievementFade {
+                from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(achievementStyle);
+
+        // Check for achievements periodically
+        setInterval(showRandomAchievement, 45000); // Every 45 seconds
+
+        // Progressive Web App features
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // In a real PWA, you would register a service worker here
+                console.log('SarvoPari is ready to work offline with PWA features!');
+            });
+        }
+
+        // Add installation prompt for PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button in support section
+            const installBtn = document.createElement('button');
+            installBtn.className = 'btn-primary';
+            installBtn.textContent = '📱 Install SarvoPari';
+            installBtn.onclick = async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    installBtn.remove();
+                }
+            };
+            
+            document.querySelector('#support .feedback-form').appendChild(installBtn);
+        });
+
+        // Data export feature (Premium)
+        function exportUserData() {
+            if (!userData.isPremium) {
+                alert('Data export is a premium feature. Upgrade to access this functionality!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(userData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sarvopari_data_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert('Your data has been exported successfully!');
+        }
+
+        // Add export button to profile section (for premium users)
+        function addExportButton() {
+            if (userData.isPremium) {
+                const exportBtn = document.createElement('button');
+                exportBtn.className = 'btn-secondary';
+                exportBtn.textContent = '📊 Export My Data';
+                exportBtn.style.marginTop = '10px';
+                exportBtn.onclick = exportUserData;
+                
+                const profileContainer = document.querySelector('.profile-container');
+                if (profileContainer && !profileContainer.querySelector('button[onclick*="exportUserData"]')) {
+                    profileContainer.appendChild(exportBtn);
+                }
+            }
+        }
+
+        // Theme customization (could be a premium feature)
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.classList.contains('dark-theme');
+            
+            if (isDark) {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('sarvoparisTheme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                localStorage.setItem('sarvoparisTheme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('sarvoparisTheme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        }
+
+        // Add dark theme CSS
+        const darkThemeStyle = document.createElement('style');
+        darkThemeStyle.textContent = `
+            .dark-theme {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            }
+            .dark-theme .content-section {
+                background: rgba(44, 62, 80, 0.95);
+                color: white;
+            }
+            .dark-theme .section-title {
+                color: white;
+            }
+            .dark-theme .habit-item,
+            .dark-theme .question-card,
+            .dark-theme .fitness-input,
+            .dark-theme .add-habit-form {
+                background: rgba(52, 73, 94, 0.8);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+            .dark-theme input,
+            .dark-theme textarea,
+            .dark-theme select {
+                background: rgba(44, 62, 80, 0.9);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            .dark-theme .timeline-item {
+                background: rgba(52, 73, 94, 0.8);
+                color: white;
+            }
+        `;
+        document.head.appendChild(darkThemeStyle);
+
+        // Initialize theme on load
+        loadTheme();
+
+        // Final initialization call
+        setTimeout(() => {
+            addExportButton();
+            
+            // Show welcome message for new users
+            if (!userData.profile.name) {
+                setTimeout(() => {
+                    if (confirm('Welcome to SarvoPari! 🎉\n\nWould you like to set up your profile first to get a personalized experience?')) {
+                        showSection('profile');
+                        document.querySelector('.nav-btn[onclick*="profile"]').click();
+                    }
+                }, 2000);
+            }
+        }, 1000);
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            const loadTime = performance.now();
+            console.log(`SarvoPari loaded in ${Math.round(loadTime)} milliseconds`);
+            
+            // Track user engagement
+            let sessionStart = Date.now();
+            let totalInteractions = 0;
+            
+            document.addEventListener('click', () => {
+                totalInteractions++;
+            });
+            
+            window.addEventListener('beforeunload', () => {
+                const sessionDuration = Date.now() - sessionStart;
+                const engagementData = {
+                    duration: sessionDuration,
+                    interactions: totalInteractions,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // In a real app, this data would be sent to analytics
+                console.log('Session data:', engagementData);
+            });
+        });
+
+        // Accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Escape key to close forms
+            if (e.key === 'Escape') {
+                if (document.getElementById('habitForm').style.display !== 'none') {
+                    cancelHabitForm();
+                }
+            }
+            
+            // Enter key for form submissions
+            if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+                const form = e.target.closest('.add-habit-form, .feedback-form, .profile-container');
+                if (form) {
+                    const submitBtn = form.querySelector('.btn-primary');
+                    if (submitBtn) {
+                        submitBtn.click();
+                    }
+                }
+            }
+        });
+
+        // Touch gestures for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            if (!touchStartX || !touchStartY) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            // Swipe detection (minimum 100px movement)
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 100) {
+                if (diffX > 0) {
+                    // Swipe left - next section
+                    const sections = ['home', 'mood', 'habits', 'quiz', 'fitness', 'game', 'profile', 'support'];
+                    const currentIndex = sections.indexOf(currentSection);
+                    const nextIndex = (currentIndex + 1) % sections.length;
+                    showSection(sections[nextIndex]);
+                    document.querySelector(`.nav-btn[onclick*="${sections[nextIndex]}"]`).click();
+                } else {
+                    // Swipe right - previous section
+                    const sections = ['home', 'mood', 'habits', 'quiz', 'fitness', 'game', 'profile', 'support'];
+                    const currentIndex = sections.indexOf(currentSection);
+                    const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
+                    showSection(sections[prevIndex]);
+                    document.querySelector(`.nav-btn[onclick*="${sections[prevIndex]}"]`).click();
+                }
+            }
+            
+            touchStartX = 0;
+            touchStartY = 0;
+        }, { passive: true });
+
+        console.log('🎉 SarvoPari is ready! Welcome to your wellness journey!');
+    </script>
+</body>
+</html>
